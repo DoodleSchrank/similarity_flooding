@@ -1,0 +1,2 @@
+"id","film","productionstudio","genre","cost","earned","dir","released"
+"string","string","string","string","int","int","string","date"
