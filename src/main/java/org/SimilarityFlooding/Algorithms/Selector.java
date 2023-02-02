@@ -1,5 +1,8 @@
-package org.SimilarityFlooding;
+package org.SimilarityFlooding.Algorithms;
 
+import org.SimilarityFlooding.Graph;
+import org.SimilarityFlooding.Similarity;
+import org.SimilarityFlooding.TreeNode;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;

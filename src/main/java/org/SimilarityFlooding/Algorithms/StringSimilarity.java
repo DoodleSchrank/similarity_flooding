@@ -1,6 +1,8 @@
-package org.SimilarityFlooding;
+package org.SimilarityFlooding.Algorithms;
 
-public final class SimilarityAlgorithm {
+import org.SimilarityFlooding.TreeNode;
+
+public final class StringSimilarity {
     public static float Levenshtein(TreeNode nodeA, TreeNode nodeB) {
         return javax0.levenshtein.Levenshtein.distance(nodeA.name(), nodeB.name()) / 10.f;
     }

@@ -1,4 +1,8 @@
 package org.SimilarityFlooding;
+import org.SimilarityFlooding.Algorithms.FixpointFormula;
+import org.SimilarityFlooding.Algorithms.Selector;
+import org.SimilarityFlooding.Algorithms.StringSimilarity;
+
 import java.util.*;
 
 public class Main {
@@ -32,7 +36,7 @@ public class Main {
         var g2 = new Graph(new HashSet<>(nodes), new HashSet<>(relations));
 
 
-        var sf = new SimilarityFlooding(g1, g2, new SFConfig(SimilarityAlgorithm::Levenshtein, FixpointFormula::Basic));
+        var sf = new SimilarityFlooding(g1, g2, new SFConfig(StringSimilarity::Levenshtein, FixpointFormula::Basic));
         sf.run(50);
         var distances = sf.getDistances();
         var graphs = sf.getGraphs();
