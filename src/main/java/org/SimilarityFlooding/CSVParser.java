@@ -1,5 +1,9 @@
 package org.SimilarityFlooding;
 
+import org.SimilarityFlooding.DataTypes.Graph;
+import org.SimilarityFlooding.DataTypes.Relation;
+import org.SimilarityFlooding.DataTypes.TreeNode;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;

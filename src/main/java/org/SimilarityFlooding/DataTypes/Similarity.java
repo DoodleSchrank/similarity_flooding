@@ -1,4 +1,4 @@
-package org.SimilarityFlooding;
+package org.SimilarityFlooding.DataTypes;
 
 import java.util.function.BiFunction;
 

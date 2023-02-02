@@ -1,8 +1,8 @@
 package org.SimilarityFlooding.Algorithms;
 
-import org.SimilarityFlooding.Graph;
-import org.SimilarityFlooding.Relation;
-import org.SimilarityFlooding.Similarity;
+import org.SimilarityFlooding.DataTypes.Graph;
+import org.SimilarityFlooding.DataTypes.Relation;
+import org.SimilarityFlooding.DataTypes.Similarity;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;

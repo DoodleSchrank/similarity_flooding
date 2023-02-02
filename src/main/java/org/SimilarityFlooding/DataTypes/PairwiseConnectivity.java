@@ -1,4 +1,4 @@
-package org.SimilarityFlooding;
+package org.SimilarityFlooding.DataTypes;
 
 public class PairwiseConnectivity {
     private final Similarity parents;

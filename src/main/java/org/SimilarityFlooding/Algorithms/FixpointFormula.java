@@ -1,7 +1,7 @@
 package org.SimilarityFlooding.Algorithms;
 
-import org.SimilarityFlooding.PairwiseConnectivity;
-import org.SimilarityFlooding.Similarity;
+import org.SimilarityFlooding.DataTypes.PairwiseConnectivity;
+import org.SimilarityFlooding.DataTypes.Similarity;
 
 import java.util.List;
 

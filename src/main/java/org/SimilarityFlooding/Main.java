@@ -2,6 +2,9 @@ package org.SimilarityFlooding;
 import org.SimilarityFlooding.Algorithms.FixpointFormula;
 import org.SimilarityFlooding.Algorithms.Selector;
 import org.SimilarityFlooding.Algorithms.StringSimilarity;
+import org.SimilarityFlooding.DataTypes.Graph;
+import org.SimilarityFlooding.DataTypes.Relation;
+import org.SimilarityFlooding.DataTypes.TreeNode;
 
 import java.util.*;
 

@@ -1,5 +1,9 @@
 package org.SimilarityFlooding;
 
+import org.SimilarityFlooding.DataTypes.Graph;
+import org.SimilarityFlooding.DataTypes.PairwiseConnectivity;
+import org.SimilarityFlooding.DataTypes.Similarity;
+import org.SimilarityFlooding.DataTypes.TreeNode;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -7,7 +11,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 @FunctionalInterface
