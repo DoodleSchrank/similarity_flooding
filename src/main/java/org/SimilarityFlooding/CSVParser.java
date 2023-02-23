@@ -15,10 +15,11 @@ class CSVParser {
      *
      * @return Pair of Nodes and Edges
      */
-    public static Optional<Graph> Parse(String uri) {
+    public static Optional<Graph> Parse(List<String> schemes) {
         BufferedReader reader;
         List<String> columns;
         List<String> types;
+        var uri = schemes.get(0);
         // Split CSV by ',' and read out column headers and types in the second row
         try {
             reader = new BufferedReader(new FileReader(uri));
@@ -32,7 +33,6 @@ class CSVParser {
             return Optional.empty();
         }
 
-        var nodes = new HashSet<TreeNode>();
         var edges = new HashSet<Relation>();
 
         // static schema types
@@ -41,7 +41,7 @@ class CSVParser {
                         new TreeNode("table"),
                         new TreeNode("column"),
                         new TreeNode("columntype")));
-        nodes.addAll(schematypes);
+        var nodes = new HashSet<>(schematypes);
         // generate datatypes based on unique values for type in the CSV
         List<TreeNode> datatypes = new ArrayList<>();
         types.stream().distinct().forEach(type -> datatypes.add(new TreeNode(type)));

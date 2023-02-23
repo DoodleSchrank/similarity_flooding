@@ -1,33 +1,35 @@
 package org.SimilarityFlooding;
 
-import org.SimilarityFlooding.DataTypes.Graph;
-import org.SimilarityFlooding.DataTypes.PairwiseConnectivity;
-import org.SimilarityFlooding.DataTypes.Similarity;
-import org.SimilarityFlooding.DataTypes.TreeNode;
+import org.SimilarityFlooding.DataTypes.*;
 import org.javatuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 @FunctionalInterface
-interface Function5<T, U, V, W, X, R> {
-    R apply(T t, U u, V v, W w, X x);
+interface Function6<T, U, V, W, X, Y, R> {
+    R apply(T t, U u, V v, W w, X x, Y y);
 }
+
+enum FixpointFormula {
+    Basic, A, B, C
+}
+
 record SFConfig(BiFunction<TreeNode, TreeNode, Float> similarityAlgorithm,
-                Function5<List<PairwiseConnectivity>, List<PairwiseConnectivity>, List<Similarity>, List<Similarity>, Integer, Float> fixpointFormula) {
+                FixpointFormula fixpointFormula) {
 }
 
 public class SimilarityFlooding {
-    private final ArrayList<Similarity> distances = new ArrayList<>();
-    private final ArrayList<PairwiseConnectivity> pcg = new ArrayList<>();
+    private final ArrayList<AbsoluteSimilarity> distances = new ArrayList<>();
+    private final ArrayList<PairwiseConnectivity> pcg;
     private final Graph graph1;
     private final Graph graph2;
-    private final ArrayList<Similarity> initialDistances;
-    private final Function5<List<PairwiseConnectivity>, List<PairwiseConnectivity>, List<Similarity>, List<Similarity>, Integer, Float> fixpointFormula;
+    private final FixpointFormula fixpointFormula;
+
     SimilarityFlooding(Graph g1, Graph g2, SFConfig config) {
         this.fixpointFormula = config.fixpointFormula();
 
@@ -37,84 +39,111 @@ public class SimilarityFlooding {
         this.graph2 = g2;
 
         // read database and initialize pairwise distances
-        g1.nodes().forEach(nodeA -> g2.nodes().forEach(nodeB ->
-                distances.add(new Similarity(nodeA, nodeB, config.similarityAlgorithm()))));
-        initialDistances = new ArrayList<>(distances);
+        g1.nodes().forEach(nodeA ->
+                g2.nodes().forEach(nodeB ->
+                        distances.add(new AbsoluteSimilarity(nodeA, nodeB, config.similarityAlgorithm()))));
 
+        pcg = new ArrayList<>();
         // prep PCG
-        g1.edges().forEach(edge -> g2.edges().stream()
-                    .filter(edge2 -> edge.relation().equals(edge2.relation()))
-                .forEach(matchingedge ->
-                    pcg.add(
-                            new PairwiseConnectivity(
-                                    distances.stream().filter(dist ->
-                                            dist.nodeA().equals(edge.parent()) &&
-                                                    dist.nodeB().equals(matchingedge.parent())).findFirst().get(),
-                                    distances.stream().filter(dist ->
-                                            dist.nodeA().equals(edge.child()) &&
-                                                    dist.nodeB().equals(matchingedge.child())).findFirst().get(),
-                                    edge.relation()
-                            ))));
-        pcg.forEach(pairconn -> {
-            pairconn.coefficient = 1.0f / pcg.stream().filter(pairconn::hasSameParentsAs).count(); //   1 / |nodes| that pairconn parents point to with same relation
-            pairconn.reversecoefficient = 1.0f / pcg.stream().filter(pairconn::hasSameChildrenAs).count(); //   1 / |nodes| that pairconn children are pointed to (reverse)
-            System.out.printf("(%s %s) -> |%f %f| -> (%s %s)     coeffcnt: %d revcoeffcnt %d\n",
-                    pairconn.parents().nodeA().name(),
-                    pairconn.parents().nodeB().name(),
-                    pairconn.coefficient,
-                    pairconn.reversecoefficient,
-                    pairconn.children().nodeA().name(),
-                    pairconn.children().nodeB().name(),
-                    pcg.stream().filter(pairconn::hasSameParentsAs).count(),
-                    pcg.stream().filter(pairconn::hasSameChildrenAs).count());
+        g1.edges().forEach(e -> g2.edges().stream()
+                .filter(e2 -> e.relation().equals(e2.relation()))
+                .forEach(matchingEdge ->
+                        pcg.add(new PairwiseConnectivity(
+                                distances.stream().filter(dist ->
+                                                dist.nodeA().equals(e.parent()) &&
+                                                        dist.nodeB().equals(matchingEdge.parent()))
+                                        .findFirst().orElseThrow(), // cannot be empty
+                                distances.stream().filter(dist ->
+                                                dist.nodeA().equals(e.child()) &&
+                                                        dist.nodeB().equals(matchingEdge.child()))
+                                        .findFirst().orElseThrow(), // cannot be empty
+                                e.relation()
+                        ))));
+        pcg.forEach(pairconn ->
+        {
+            //   1 / |nodes| that pairconn parents point to with same relation
+            pairconn.coefficient = 1.0f / pcg.stream().filter(pairconn::hasSameParentsAs).count();
+            //   1 / |nodes| that pairconn children are pointed to (reverse)
+            pairconn.reversecoefficient = 1.0f / pcg.stream().filter(pairconn::hasSameChildrenAs).count();
         });
     }
-    public void run(int rounds) {
-        //TODO some more conditions
+
+    public void run(int maxRounds) {
+        run(maxRounds, 0.05f);
+    }
+
+    public void run(int maxRounds, float maxresidual) {
         float residual = 1.0f;
-        var prevValues = distances.stream().map(dist -> dist.similarity).toList();
+        var prevValues = distances.stream().map(Similarity::similarity).toList();
         int iter = 0;
-        while (residual > 0.05f && iter < 1000) {
+        while (residual > maxresidual && iter < maxRounds) {
             iterate();
             iter++;
 
-            java.util.List<Float> finalPrevValues = prevValues;
+            java.util.List<Double> finalPrevValues = prevValues;
             residual = (float) IntStream.range(0, distances.size())
-                    .mapToDouble(index -> distances.get(index).similarity - finalPrevValues.get(index)).sum();
-            prevValues = distances.stream().map(dist -> dist.similarity).toList();
+                    .mapToDouble(index -> distances.get(index).similarity() - finalPrevValues.get(index)).map(Math::abs).sum();
+            prevValues = distances.stream().map(Similarity::similarity).toList();
         }
-
-        for (var i = 0; i < rounds; i++) {
-            iterate();
-        }
-        //TODO bipartite graph stuff
-        distances.sort(Comparator.comparingDouble(Similarity::similarity).reversed());
+        System.out.printf("Done after %d iterations.\n", iter);
+        distances.sort(Comparator.comparingDouble(AbsoluteSimilarity::similarity).reversed());
+        System.out.print("\n");
+        distances.forEach(dist -> System.out.printf(dist.toString() + "\n"));
     }
 
     public void iterate() {
-        //TODO debug
-        //var targetdistance = distances.stream().filter(dist -> dist.nodeA().name().equals("string") && dist.nodeB().name().equals("int")).findFirst().get();
-
         var index = 0;
         // iterate over each possible match
-        for (var distance : distances) {
-            // find all nodes pointing towards our match
-            var incomingMatches = pcg.stream().filter(pc -> pc.includesAsChildren(distance)).toList();
-            // find all nodes where our match is pointing to (reverse arrow)
-            var outgoingMatches = pcg.stream().filter(pc -> pc.includesAsParents(distance)).toList();
-
-            distance.similarity = this.fixpointFormula.apply(incomingMatches, outgoingMatches, distances, initialDistances, index);
-            index++;
-        }
+        fixpointComputation(fixpointFormula);
 
         // normalization
-        distances.forEach(dist -> dist.similarity /= Collections.max(distances.stream().map(Similarity::similarity).toList()));
+        var normalizationFactor = Collections.max(distances.stream().map(AbsoluteSimilarity::similarity).toList());
+        distances.forEach(dist -> dist.similarity /= normalizationFactor);
     }
 
-    public List<Similarity> getDistances() {
+    public List<AbsoluteSimilarity> getDistances() {
         return distances;
     }
+
     public Pair<Graph, Graph> getGraphs() {
         return new Pair<>(graph1, graph2);
+    }
+
+    private void fixpointComputation(FixpointFormula fixpointFormula) {
+        distances.forEach(distance -> {
+            distance.workingSimilarity = distance.similarity();
+            switch (fixpointFormula) {
+                case Basic:
+                case A:
+                    break;
+                case B:
+                case C:
+                    distance.workingSimilarity += distance.initialSimilarity();
+                    break;
+                case default:
+                    throw new IllegalArgumentException("FixpointFormula invalid");
+            }
+        });
+
+        // propagate Graph
+        pcg.forEach(pc -> {
+            pc.children().nextRoundSimilarity += pc.parents().workingSimilarity() * pc.coefficient;
+            pc.parents().nextRoundSimilarity += pc.children().workingSimilarity() * pc.reversecoefficient;
+        });
+
+        distances.forEach(distance -> {
+            switch (fixpointFormula) {
+                case Basic:
+                    distance.nextRoundSimilarity += distance.similarity();
+                    break;
+                case C:
+                    distance.nextRoundSimilarity += distance.similarity();
+                case A:
+                    distance.nextRoundSimilarity += distance.initialSimilarity();
+                case B:
+                    break;
+            }
+            distance.similarity = distance.nextRoundSimilarity();
+        });
     }
 }

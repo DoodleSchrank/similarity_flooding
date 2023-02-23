@@ -2,26 +2,11 @@ package org.SimilarityFlooding.DataTypes;
 
 import java.util.function.BiFunction;
 
-public class Similarity implements Comparable<Similarity> {
-
-    public float similarity;
-
-    public Similarity(TreeNode nodeA, TreeNode nodeB, float similarity) {
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-        this.similarity = similarity;
-    }
-    public Similarity(Similarity similarity) {
-        this.nodeA = similarity.nodeA();
-        this.nodeB = similarity.nodeB();
-        this.similarity = similarity.similarity;
-    }
-
-    public Similarity(TreeNode nodeA, TreeNode nodeB, BiFunction<TreeNode, TreeNode, Float> similarityAlgorithm) {
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-        this.similarity = similarityAlgorithm.apply(nodeA, nodeB);
-    }
+public abstract class Similarity {
+    public double similarity;
+    protected double initialSimilarity;
+    public double nextRoundSimilarity;
+    public double workingSimilarity;
 
     public TreeNode nodeA() {
         return this.nodeA;
@@ -31,25 +16,32 @@ public class Similarity implements Comparable<Similarity> {
         return this.nodeB;
     }
 
-    public float similarity() {
+    public double similarity() {
         return this.similarity;
+    }
+
+    public double nextRoundSimilarity() {
+        return this.nextRoundSimilarity;
+    }
+    public double initialSimilarity() {
+        return this.initialSimilarity;
+    }
+    public double workingSimilarity() {
+        return this.workingSimilarity;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Similarity) {
-            return ((Similarity) obj).nodeA().equals(this.nodeA()) && ((Similarity) obj).nodeB().equals(this.nodeB()) ||
-                    ((Similarity) obj).nodeB().equals(this.nodeA()) && ((Similarity) obj).nodeA().equals(this.nodeB());
-        } else {
-            return false;
-        }
+        if (!(obj instanceof Similarity s)) return false;
+        return this.nodeA().equals(s.nodeA()) && this.nodeB().equals(s.nodeB());
+
     }
 
     @Override
-    public int compareTo(Similarity similarity) {
-        return Math.round(Math.signum(this.similarity - similarity.similarity));
+    public int hashCode() {
+        return nodeA.hashCode() + nodeB.hashCode();
     }
 
-    private final TreeNode nodeA;
-    private final TreeNode nodeB;
+    protected TreeNode nodeA;
+    protected TreeNode nodeB;
 }
