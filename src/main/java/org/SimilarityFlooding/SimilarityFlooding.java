@@ -4,10 +4,7 @@ import org.SimilarityFlooding.DataTypes.*;
 import org.javatuples.Pair;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 @FunctionalInterface
@@ -19,7 +16,7 @@ enum FixpointFormula {
     Basic, A, B, C
 }
 
-record SFConfig(BiFunction<TreeNode, TreeNode, Float> similarityAlgorithm,
+record SFConfig(BiFunction<TreeNode, TreeNode, Double> similarityAlgorithm,
                 FixpointFormula fixpointFormula) {
 }
 
@@ -76,10 +73,20 @@ public class SimilarityFlooding {
         float residual = 1.0f;
         var prevValues = distances.stream().map(Similarity::similarity).toList();
         int iter = 0;
+
+        // initialize values
+        iterate();
         while (residual > maxresidual && iter < maxRounds) {
             iterate();
+
+
+            System.out.print("\nAfter normalization:\n");
+            distances.forEach(dist -> System.out.printf(dist.toString() + "\n"));
+            System.out.print("--------------\n");
+
             iter++;
 
+            // residual computation
             java.util.List<Double> finalPrevValues = prevValues;
             residual = (float) IntStream.range(0, distances.size())
                     .mapToDouble(index -> distances.get(index).similarity() - finalPrevValues.get(index)).map(Math::abs).sum();
@@ -92,10 +99,8 @@ public class SimilarityFlooding {
     }
 
     public void iterate() {
-        var index = 0;
         // iterate over each possible match
         fixpointComputation(fixpointFormula);
-
         // normalization
         var normalizationFactor = Collections.max(distances.stream().map(AbsoluteSimilarity::similarity).toList());
         distances.forEach(dist -> dist.similarity /= normalizationFactor);
@@ -111,39 +116,34 @@ public class SimilarityFlooding {
 
     private void fixpointComputation(FixpointFormula fixpointFormula) {
         distances.forEach(distance -> {
-            distance.workingSimilarity = distance.similarity();
+            distance.similarity = distance.similarityN = distance.similarityN1();
             switch (fixpointFormula) {
                 case Basic:
+                    break;
                 case A:
+                    distance.similarityN1 += distance.initialSimilarity();
                     break;
                 case B:
+                    distance.similarity += distance.initialSimilarity();
+                    distance.similarityN1 = 0;
+                    break;
                 case C:
-                    distance.workingSimilarity += distance.initialSimilarity();
+                    distance.similarity += distance.initialSimilarity();
+                    distance.similarityN1 += distance.initialSimilarity();
                     break;
                 case default:
                     throw new IllegalArgumentException("FixpointFormula invalid");
             }
         });
+        System.out.print("\nAfter first fixpoint halve:\n");
+        distances.forEach(dist -> System.out.printf(dist.toString() + "\n"));
 
         // propagate Graph
         pcg.forEach(pc -> {
-            pc.children().nextRoundSimilarity += pc.parents().workingSimilarity() * pc.coefficient;
-            pc.parents().nextRoundSimilarity += pc.children().workingSimilarity() * pc.reversecoefficient;
+            pc.children().similarityN1 += pc.parents().similarity() * pc.coefficient;
+            pc.parents().similarityN1 += pc.children().similarity() * pc.reversecoefficient;
         });
-
-        distances.forEach(distance -> {
-            switch (fixpointFormula) {
-                case Basic:
-                    distance.nextRoundSimilarity += distance.similarity();
-                    break;
-                case C:
-                    distance.nextRoundSimilarity += distance.similarity();
-                case A:
-                    distance.nextRoundSimilarity += distance.initialSimilarity();
-                case B:
-                    break;
-            }
-            distance.similarity = distance.nextRoundSimilarity();
-        });
+        System.out.print("\nAfter propagation:\n");
+        distances.forEach(dist -> System.out.printf(dist.toString() + "\n"));
     }
 }

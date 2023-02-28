@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.Map;
 
 public final class StringSimilarity {
-    public static float Levenshtein(TreeNode nodeA, TreeNode nodeB) {
-        return javax0.levenshtein.Levenshtein.distance(nodeA.name(), nodeB.name()) / 10.f;
+    public static double Levenshtein(TreeNode nodeA, TreeNode nodeB) {
+        return javax0.levenshtein.Levenshtein.distance(nodeA.name(), nodeB.name()) / 10.0d;
     }
 
 
-    public static float MongeElkan(TreeNode nodeA, TreeNode nodeB) {
+    public static double MongeElkan(TreeNode nodeA, TreeNode nodeB) {
         UnifiedLanguageCorpus ulc;
         try {
             ulc = new UnifiedLanguageCorpus(Map.of(Language.English, new WordNetInterface()));
@@ -22,7 +22,7 @@ public final class StringSimilarity {
         return (float) ulc.semanticDiff(new StringPlusNaked(nodeA.name(), Language.English), new StringPlusNaked(nodeB.name(), Language.English));
     }
 
-    public static float AllEqual(TreeNode nodeA, TreeNode nodeB) {
-        return 1.0f;
+    public static double AllEqual(TreeNode nodeA, TreeNode nodeB) {
+        return 1.0d;
     }
 }

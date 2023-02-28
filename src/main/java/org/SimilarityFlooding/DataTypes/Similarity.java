@@ -1,12 +1,10 @@
 package org.SimilarityFlooding.DataTypes;
 
-import java.util.function.BiFunction;
-
 public abstract class Similarity {
     public double similarity;
     protected double initialSimilarity;
-    public double nextRoundSimilarity;
-    public double workingSimilarity;
+    public double similarityN;
+    public double similarityN1;
 
     public TreeNode nodeA() {
         return this.nodeA;
@@ -20,14 +18,14 @@ public abstract class Similarity {
         return this.similarity;
     }
 
-    public double nextRoundSimilarity() {
-        return this.nextRoundSimilarity;
+    public double similarityN1() {
+        return this.similarityN1;
     }
     public double initialSimilarity() {
         return this.initialSimilarity;
     }
-    public double workingSimilarity() {
-        return this.workingSimilarity;
+    public double similarityN() {
+        return this.similarityN;
     }
 
     @Override

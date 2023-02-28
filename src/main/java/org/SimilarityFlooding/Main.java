@@ -85,7 +85,7 @@ public class Main {
 
         var sf = new SimilarityFlooding(g1, g2, new SFConfig(StringSimilarity::AllEqual, FixpointFormula.Basic));
         //sf.test();
-        sf.run(5, 0.05f);
+        sf.run(8, 0.05f);
         var distances = sf.getDistances();
         var graphs = sf.getGraphs();
 
