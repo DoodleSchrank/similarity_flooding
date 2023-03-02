@@ -1,28 +1,28 @@
 package org.SimilarityFlooding.Algorithms;
-
-import org.MongeElkan.*;
-import org.SimilarityFlooding.DataTypes.TreeNode;
-
+/*import scenarioCreator.generation.processing.transformations.linguistic.helpers.biglingo.UnifiedLanguageCorpus;
+import scenarioCreator.data.Language;
+import scenarioCreator.generation.processing.transformations.linguistic.helpers.biglingo.WordNetInterface;
+import scenarioCreator.data.primitives.StringPlusNaked;*/
 import java.io.IOException;
 import java.util.Map;
 
 public final class StringSimilarity {
-    public static double Levenshtein(TreeNode nodeA, TreeNode nodeB) {
-        return javax0.levenshtein.Levenshtein.distance(nodeA.name(), nodeB.name()) / 10.0d;
+    public static double Levenshtein(String nodeA, String nodeB) {
+        return javax0.levenshtein.Levenshtein.distance(nodeA, nodeB) / 10.0d;
     }
+    public static double MongeElkan(String nodeA, String nodeB) {
 
-
-    public static double MongeElkan(TreeNode nodeA, TreeNode nodeB) {
-        UnifiedLanguageCorpus ulc;
+        /*scenarioCreator.generation.processing.transformations.linguistic.helpers.biglingo.UnifiedLanguageCorpus ulc;
         try {
             ulc = new UnifiedLanguageCorpus(Map.of(Language.English, new WordNetInterface()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return (float) ulc.semanticDiff(new StringPlusNaked(nodeA.name(), Language.English), new StringPlusNaked(nodeB.name(), Language.English));
+        return ulc.semanticDiff(new StringPlusNaked(nodeA, Language.English), new StringPlusNaked(nodeB, Language.English));*/
+        return 1.0d;
     }
 
-    public static double AllEqual(TreeNode nodeA, TreeNode nodeB) {
+    public static double AllEqual(String nodeA, String nodeB) {
         return 1.0d;
     }
 }

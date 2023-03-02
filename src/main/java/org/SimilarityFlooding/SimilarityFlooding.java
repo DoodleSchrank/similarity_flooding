@@ -12,14 +12,6 @@ interface Function6<T, U, V, W, X, Y, R> {
     R apply(T t, U u, V v, W w, X x, Y y);
 }
 
-enum FixpointFormula {
-    Basic, A, B, C
-}
-
-record SFConfig(BiFunction<TreeNode, TreeNode, Double> similarityAlgorithm,
-                FixpointFormula fixpointFormula) {
-}
-
 public class SimilarityFlooding {
     private final ArrayList<AbsoluteSimilarity> distances = new ArrayList<>();
     private final ArrayList<PairwiseConnectivity> pcg;
@@ -92,6 +84,7 @@ public class SimilarityFlooding {
                     .mapToDouble(index -> distances.get(index).similarity() - finalPrevValues.get(index)).map(Math::abs).sum();
             prevValues = distances.stream().map(Similarity::similarity).toList();
         }
+        iterate();
         System.out.printf("Done after %d iterations.\n", iter);
         distances.sort(Comparator.comparingDouble(AbsoluteSimilarity::similarity).reversed());
         System.out.print("\n");
@@ -116,7 +109,7 @@ public class SimilarityFlooding {
 
     private void fixpointComputation(FixpointFormula fixpointFormula) {
         distances.forEach(distance -> {
-            distance.similarity = distance.similarityN = distance.similarityN1();
+            distance.similarity = distance.similarityN1();
             switch (fixpointFormula) {
                 case Basic:
                     break;

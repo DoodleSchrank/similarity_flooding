@@ -1,0 +1,6 @@
+[submodule "src/main/java/org/--force"]
+	path = src/main/java/org/--force
+	url = https://github.com/Hafflationist/ScenarioCreator.git
+[submodule "src/main/java/ScenarioCreator"]
+	path = src/main/java/ScenarioCreator
+	url = https://github.com/Hafflationist/ScenarioCreator.git

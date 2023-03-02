@@ -3,7 +3,6 @@ package org.SimilarityFlooding.DataTypes;
 public abstract class Similarity {
     public double similarity;
     protected double initialSimilarity;
-    public double similarityN;
     public double similarityN1;
 
     public TreeNode nodeA() {
@@ -23,9 +22,6 @@ public abstract class Similarity {
     }
     public double initialSimilarity() {
         return this.initialSimilarity;
-    }
-    public double similarityN() {
-        return this.similarityN;
     }
 
     @Override

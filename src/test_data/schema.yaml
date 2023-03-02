@@ -1,0 +1,649 @@
+---
+id:
+  number: 7418
+name:
+  segmentList:
+  - token: "schema"
+    gssSet:
+    - id: 30361
+  - token: "ram"
+    gssSet:
+    - offset: 4050410
+      partOfSpeech: "NOUN"
+    - offset: 4052757
+      partOfSpeech: "NOUN"
+  namingConvention: "SCREAMINGSNAKECASE"
+context:
+  semanticDomain:
+    value: 1
+  language: "Mixed"
+tableSet:
+- id:
+    number: 1809
+  name:
+    segmentList:
+    - token: "tabelle"
+      gssSet:
+      - id: 24028
+    - token: "flamenco"
+      gssSet:
+      - offset: 533036
+        partOfSpeech: "NOUN"
+      - offset: 7055401
+        partOfSpeech: "NOUN"
+    namingConvention: "KEBABCASE"
+  columnList:
+  - id:
+      number: 9932
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "raper"
+        gssSet:
+        - offset: 10507230
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  - id:
+      number: 8083
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "brand"
+        gssSet:
+        - id: 41142
+        - id: 99973
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 4486
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "backpackingtent"
+        gssSet:
+        - offset: 2769963
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "English"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  context:
+    semanticDomain:
+      value: 1
+    language: "Mixed"
+  tableConstraintSet: []
+  functionalDependencySet: []
+- id:
+    number: 5941
+  name:
+    segmentList:
+    - token: "tabelle"
+      gssSet:
+      - id: 24028
+    - token: "meteorologicalconditions"
+      gssSet:
+      - offset: 14520123
+        partOfSpeech: "NOUN"
+    namingConvention: "KEBABCASE"
+  columnList:
+  - id:
+      number: 3120
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "olfaction"
+        gssSet:
+        - offset: 5658603
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 7634
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "gallbladder"
+        gssSet:
+        - offset: 5385161
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "German"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  context:
+    semanticDomain:
+      value: 1
+    language: "Mixed"
+  tableConstraintSet: []
+  functionalDependencySet: []
+- id:
+    number: 6595
+  name:
+    segmentList:
+    - token: "tabelle"
+      gssSet:
+      - id: 24028
+    - token: "grape"
+      gssSet:
+      - offset: 7758680
+        partOfSpeech: "NOUN"
+    namingConvention: "KEBABCASE"
+  columnList:
+  - id:
+      number: 196
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "inaugurate"
+        gssSet: []
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "English"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 2437
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "categorization"
+        gssSet:
+        - offset: 1012712
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "English"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 7291
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "trick"
+        gssSet:
+        - offset: 171618
+          partOfSpeech: "NOUN"
+        - offset: 427580
+          partOfSpeech: "NOUN"
+        - offset: 750730
+          partOfSpeech: "NOUN"
+        - offset: 99951
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "German"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 9506
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "destroy"
+        gssSet: []
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 8152
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "chart"
+        gssSet:
+        - id: 24030
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "German"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  context:
+    semanticDomain:
+      value: 1
+    language: "English"
+  tableConstraintSet: []
+  functionalDependencySet: []
+- id:
+    number: 9717
+  name:
+    segmentList:
+    - token: "tabelle"
+      gssSet:
+      - id: 24028
+    - token: "variation"
+      gssSet:
+      - offset: 194969
+        partOfSpeech: "NOUN"
+      - offset: 5840650
+        partOfSpeech: "NOUN"
+      - offset: 7337390
+        partOfSpeech: "NOUN"
+    namingConvention: "KEBABCASE"
+  columnList:
+  - id:
+      number: 5686
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "father"
+        gssSet:
+        - offset: 10081204
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  - id:
+      number: 799
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "autodidact"
+        gssSet:
+        - offset: 9825413
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "German"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 1758
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "decoration"
+        gssSet:
+        - offset: 262249
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "German"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  - id:
+      number: 9880
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "approach"
+        gssSet:
+        - offset: 280853
+          partOfSpeech: "NOUN"
+        - offset: 941140
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 1637
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "submergence"
+        gssSet:
+        - offset: 7364115
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "German"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 2544
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "riteofpassage"
+        gssSet:
+        - offset: 1037294
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: true
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "Mixed"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "English"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: true
+  - id:
+      number: 1875
+    name:
+      segmentList:
+      - token: "spalte"
+        gssSet:
+        - id: 32483
+      - token: "chasm"
+        gssSet:
+        - offset: 9242389
+          partOfSpeech: "NOUN"
+      namingConvention: "SNAKECASE"
+    dataType:
+      dataTypeEnum: "NVARCHAR"
+      isNullable: false
+    valueSet:
+    - content: "1"
+    - content: "2"
+    - content: "3"
+    context:
+      context:
+        semanticDomain:
+          value: 1
+        language: "English"
+      encoding: "UTF"
+      unitOfMeasure: "Pure"
+      language: "Mixed"
+      numericalDistribution:
+        stepSize: 0.0
+        stepToOccurrences: {}
+    constraintSet: []
+    nullable: false
+  context:
+    semanticDomain:
+      value: 1
+    language: "Mixed"
+  tableConstraintSet: []
+  functionalDependencySet: []

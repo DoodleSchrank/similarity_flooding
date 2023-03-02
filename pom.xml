@@ -45,6 +45,16 @@
             <artifactId>org.jetbrains.annotations</artifactId>
             <version>1.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>de.tuebingen.uni.sfs.germanet</groupId>
+            <artifactId>germanet-api</artifactId>
+            <version>13.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.21</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
