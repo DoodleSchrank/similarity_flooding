@@ -1,0 +1,2 @@
+"id","title","studio","moviegenre","budget","gross","director","date"
+"string","string","string","string","int","int","string","date"

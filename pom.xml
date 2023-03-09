@@ -55,6 +55,13 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.21</version>
         </dependency>
+        <dependency>
+            <groupId>org.scenarioCreator</groupId>
+            <artifactId>scenarioCreator</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libraries/scenarioCreator.jar</systemPath>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
