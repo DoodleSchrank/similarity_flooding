@@ -1,1 +1,6 @@
-/src/org/MongeElkan/resources/wordnet/
+libraries/*
+out
+target
+META-INF
+.idea
+.gitmodules

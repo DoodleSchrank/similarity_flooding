@@ -1,5 +1,7 @@
 package org.SimilarityFlooding.DataTypes;
 
+import org.utils.Correspondence;
+
 public class PairwiseConnectivity {
     private final AbsoluteSimilarity parents;
     private final AbsoluteSimilarity children;
@@ -29,15 +31,20 @@ public class PairwiseConnectivity {
         return this.children.equals(other.children) &&
                 this.relation.equals(other.relation);
     }
-    public boolean includesAsParents(Similarity other) {
+    public boolean includesAsParents(Correspondence other) {
         return this.parents.equals(other);
     }
-    public boolean includesAsChildren(Similarity other) {
+    public boolean includesAsChildren(Correspondence other) {
         return this.children.equals(other);
     }
     
     @Override
     public String toString() {
-        return parents.nodeA.name() + " - " + parents.nodeB.name() + " < " + reversecoefficient + " -- " + coefficient + " > " + children.nodeA.name() + " - " + children.nodeB.name();
+        return parents.nodeA().toString() + " - " +
+                parents.nodeB().toString() + " < " +
+                reversecoefficient + " -- " +
+                coefficient + " > " +
+                children.nodeA().toString() + " - " +
+                children.nodeB().toString();
     }
 }

@@ -2,8 +2,8 @@ package org.SimilarityFlooding.Algorithms;
 
 import org.SimilarityFlooding.DataTypes.Graph;
 import org.SimilarityFlooding.DataTypes.Relation;
-import org.SimilarityFlooding.DataTypes.AbsoluteSimilarity;
 import org.javatuples.Pair;
+import org.utils.Correspondence;
 
 import java.util.*;
 
@@ -19,30 +19,31 @@ public final class Filter {
 
     public static final Map<String, String> Knowledge = Collections.unmodifiableMap(StaticMappings);
 
-    public static List<AbsoluteSimilarity> knowledgeFilter(List<AbsoluteSimilarity> distances) {
-        return knowledgeFilter(distances, StaticMappings);
+    public static List<Correspondence<String>> knowledgeFilter(List<Correspondence<String>> correspondences) {
+        return knowledgeFilter(correspondences, StaticMappings);
     }
 
-    public static List<AbsoluteSimilarity> knowledgeFilter(List<AbsoluteSimilarity> distances, Map<String, String> knowledge) {
-        var filteredDistances = new ArrayList<AbsoluteSimilarity>();
-        for (var dist : distances) {
-            var nodeA = Objects.toString(knowledge.get(dist.nodeA().name()),
-                    knowledge.containsValue(dist.nodeA().name()) ? dist.nodeA().name() : null);
-            var nodeB = Objects.toString(knowledge.get(dist.nodeB().name()),
-                    knowledge.containsValue(dist.nodeB().name()) ? dist.nodeB().name() : null);
+    public static List<Correspondence<String>> knowledgeFilter(List<Correspondence<String>> correspondences, Map<String, String> knowledge) {
+        var filteredDistances = new ArrayList<Correspondence<String>>();
+        for (var dist : correspondences) {
+            var nodeA = Objects.toString(knowledge.get(dist.nodeA()),
+                    knowledge.containsValue(dist.nodeA()) ? dist.nodeA() : null);
+            var nodeB = Objects.toString(knowledge.get(dist.nodeB()),
+                    knowledge.containsValue(dist.nodeB()) ? dist.nodeB() : null);
 
             if (nodeA == null && nodeB == null)
                 filteredDistances.add(dist);
             else if (nodeA != null && nodeA.equals(nodeB)) {
-                filteredDistances.add(new AbsoluteSimilarity(dist.nodeA(), dist.nodeB(), 1.0f));
+                filteredDistances.add(new Correspondence<String>(dist, 1.0f));
             }
         }
 
-        filteredDistances.sort(Comparator.comparingDouble(AbsoluteSimilarity::similarity).reversed());
+        filteredDistances.sort(Comparator.comparingDouble(Correspondence::similarity));
+        Collections.reverse(filteredDistances);
         return filteredDistances;
     }
 
-    public static List<AbsoluteSimilarity> typingConstraintFilter(Pair<Graph, Graph> graphs, List<AbsoluteSimilarity> distances) {
+    public static List<Correspondence<String>> typingConstraintFilter(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances) {
         var filteredDistances = new ArrayList<>(distances);
 
         var typedNodes1 = graphs.getValue0().edges().stream().filter(edge -> edge.relation().equals("sqltype")).map(Relation::parent).toList();
@@ -56,13 +57,13 @@ public final class Filter {
         return filteredDistances;
     }
 
-    public static List<AbsoluteSimilarity> cardinalityConstraintFilter(List<AbsoluteSimilarity> distances) {
+    public static List<Correspondence<String>> cardinalityConstraintFilter(List<Correspondence<String>> distances) {
         var filteredDistances = new ArrayList<>(distances);
         //TODO flip to add distances instead of removing them
         filteredDistances.removeIf(distance -> distances.stream()
                 .map(dist -> distances.stream()
                         .filter(d -> d.nodeB().equals(dist.nodeB()))
-                        .max(Comparator.comparingDouble(AbsoluteSimilarity::similarity)).get())
+                        .max(Comparator.comparingDouble(Correspondence::similarity)).get())
                 .noneMatch(distance::equals));
         return filteredDistances;
     }

@@ -2,6 +2,7 @@ package org.SimilarityFlooding.Algorithms;
 
 import org.SimilarityFlooding.DataTypes.*;
 import org.javatuples.Pair;
+import org.utils.Correspondence;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,9 +16,9 @@ public class Selector {
         return t -> seen.add(keyExtractor.apply(t));
     }
 
-    public static List<AbsoluteSimilarity> selectThreshold(Pair<Graph, Graph> graphs, List<AbsoluteSimilarity> distances, float similarityThreshold) {
-        var relativeSimilarities = new ArrayList<RelativeSimilarity>();
-        distances.forEach(dist -> relativeSimilarities.add(new RelativeSimilarity(dist)));
+    public static List<Correspondence<String>> selectThreshold(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances, float similarityThreshold) {
+        var relativeSimilarities = new ArrayList<RelativeSimilarity<String>>();
+        distances.forEach(dist -> relativeSimilarities.add(new RelativeSimilarity<>(dist)));
 
         graphs.getValue0().nodes().forEach(node -> {
                     var maxSim = Collections.max(relativeSimilarities.stream().filter(rsim -> rsim.nodeA().equals(node)).map(RelativeSimilarity::similarity).toList());
@@ -34,9 +35,9 @@ public class Selector {
                 .filter(rsim -> rsim.similarity() > similarityThreshold && rsim.reverseSimilarity() > similarityThreshold).toList()::contains).toList());
     }
 
-    public static List<AbsoluteSimilarity> highestCumulativeSimilaritySelection(Pair<Graph, Graph> graphs, List<AbsoluteSimilarity> distances) {
-        var uniqueNodeA = new ArrayList<>(distances.stream().filter(distinctByKey(AbsoluteSimilarity::nodeA)).map(AbsoluteSimilarity::nodeA).map(TreeNode::name).toList());
-        var uniqueNodeB = new ArrayList<>(distances.stream().filter(distinctByKey(AbsoluteSimilarity::nodeB)).map(AbsoluteSimilarity::nodeB).map(TreeNode::name).toList());
+    public static List<Correspondence<String>> highestCumulativeSimilaritySelection(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances) {
+        var uniqueNodeA = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeA)).map(Correspondence::nodeA).map(Object::toString).toList());
+        var uniqueNodeB = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeB)).map(Correspondence::nodeB).map(Object::toString).toList());
 
         // ensure square matrix
         var nodeAmountDiff = uniqueNodeA.size() - uniqueNodeB.size();
@@ -58,38 +59,39 @@ public class Selector {
                 var currentNodeA = uniqueNodeA.get(x);
                 var currentNodeB = uniqueNodeB.get(y);
                 matrix[y][x] = 1 - distances.stream().filter(dist ->
-                                dist.nodeA().name().equals(currentNodeA) &&
-                                        dist.nodeB().name().equals(currentNodeB))
-                        .map(AbsoluteSimilarity::similarity).findFirst()
+                                dist.nodeA().equals(currentNodeA) &&
+                                        dist.nodeB().equals(currentNodeB))
+                        .map(Correspondence::similarity).findFirst()
                         .orElse(Double.MAX_VALUE);
             }
         }
 
         var ha = new HungarianAlgorithm(matrix);
         var assignments = ha.findOptimalAssignment();
-        var resultingAssignments = new ArrayList<AbsoluteSimilarity>();
+        var resultingAssignments = new ArrayList<Correspondence<String>>();
 
         for (var ass : assignments) {
             resultingAssignments.add(distances.stream().filter(dist ->
-                    dist.nodeA().name().equals(uniqueNodeA.get(ass[0])) &&
-                            dist.nodeB().name().equals(uniqueNodeB.get(ass[1]))
+                    dist.nodeA().toString().equals(uniqueNodeA.get(ass[0])) &&
+                            dist.nodeB().toString().equals(uniqueNodeB.get(ass[1]))
             ).findFirst().orElse(
                     // one of the nodes had name "null" -> doesn't exist -> TreeNode must be created
-                    new AbsoluteSimilarity(
+                    new Correspondence<>(
                             graphs.getValue0().nodes().stream()
-                                    .filter(node -> node.name().equals(uniqueNodeA.get(ass[0])))
-                                    .findFirst().orElse(new TreeNode(uniqueNodeA.get(ass[0]))),
+                                    .filter(node -> node.equals(uniqueNodeA.get(ass[0])))
+                                    .findFirst().orElse(uniqueNodeA.get(ass[0])),
                             graphs.getValue1().nodes().stream()
-                                    .filter(node -> node.name().equals(uniqueNodeB.get(ass[1])))
-                                    .findFirst().orElse(new TreeNode(uniqueNodeB.get(ass[1]))),
+                                    .filter(node -> node.equals(uniqueNodeB.get(ass[1])))
+                                    .findFirst().orElse(uniqueNodeB.get(ass[1])),
                             1.0f)));
         }
         return resultingAssignments;
     }
 
-    public static List<AbsoluteSimilarity> stableMarriageSelection(List<AbsoluteSimilarity> distances) {
-        distances.sort(Comparator.comparingDouble(AbsoluteSimilarity::similarity).reversed());
-        var resultDistances = new ArrayList<AbsoluteSimilarity>();
+    public static List<Correspondence<String>> stableMarriageSelection(List<Correspondence<String>> distances) {
+        distances.sort(Comparator.comparingDouble(Correspondence::similarity));
+        Collections.reverse(distances);
+        var resultDistances = new ArrayList<Correspondence<String>>();
         for (var distance : distances) {
             if (resultDistances.stream().anyMatch(rd -> rd.nodeA().equals(distance.nodeA()) || rd.nodeB().equals(distance.nodeB())))
                 continue;

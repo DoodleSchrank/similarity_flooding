@@ -1,4 +1,4 @@
 package org.SimilarityFlooding.DataTypes;
 
-public record Relation(String relation, TreeNode parent, TreeNode child) {
+public record Relation<T>(String relation, T parent, T child) {
 }

@@ -1,29 +1,25 @@
 package org.SimilarityFlooding.DataTypes;
 
+import org.utils.Correspondence;
+
 /**
  * Holds two nodes and a float indicating how similar they are (higher is more).
  * Additionally, a reverse similarity is used as the SelectThreshold operator of the paper dictates.
  * Two objects with the same nodes but different float values are considered to be equal.
  */
-public class RelativeSimilarity extends Similarity {
+public class RelativeSimilarity<T> extends Correspondence<T> {
     public Double reverseSimilarity;
-    public RelativeSimilarity(TreeNode nodeA, TreeNode nodeB, Double similarity, Double reverseSimilarity) {
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-        this.similarity = similarity;
+    public RelativeSimilarity(T nodeA, T nodeB, Double similarity, Double reverseSimilarity) {
+        super(nodeA, nodeB, similarity);
         this.reverseSimilarity = reverseSimilarity;
     }
-    public RelativeSimilarity(RelativeSimilarity relativeSimilarity) {
-        this.nodeA = relativeSimilarity.nodeA();
-        this.nodeB = relativeSimilarity.nodeB();
-        this.similarity = relativeSimilarity.similarity;
+    public RelativeSimilarity(RelativeSimilarity<T> relativeSimilarity) {
+        super(relativeSimilarity.nodeA(), relativeSimilarity.nodeB(), relativeSimilarity.similarity());
         this.reverseSimilarity = relativeSimilarity.reverseSimilarity;
     }
 
-    public RelativeSimilarity(AbsoluteSimilarity absoluteSimilarity) {
-        this.nodeA = absoluteSimilarity.nodeA();
-        this.nodeB = absoluteSimilarity.nodeB();
-        this.similarity = absoluteSimilarity.similarity;
+    public RelativeSimilarity(Correspondence<T> absoluteSimilarity) {
+        super(absoluteSimilarity.nodeA(), absoluteSimilarity.nodeB(), absoluteSimilarity.similarity());
         this.reverseSimilarity = absoluteSimilarity.similarity;
     }
 

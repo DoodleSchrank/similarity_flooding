@@ -31,26 +31,6 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>edu.mit</groupId>
-            <artifactId>jwi</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.dmeoli</groupId>
-            <artifactId>WS4J</artifactId>
-            <version>master-c3a97d944b-1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.realityforge.org.jetbrains.annotations</groupId>
-            <artifactId>org.jetbrains.annotations</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>de.tuebingen.uni.sfs.germanet</groupId>
-            <artifactId>germanet-api</artifactId>
-            <version>13.3.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.21</version>
@@ -60,7 +40,14 @@
             <artifactId>scenarioCreator</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libraries/scenarioCreator.jar</systemPath>
+            <systemPath>${project.basedir}/libraries/ScenarioCreator.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.utils</groupId>
+            <artifactId>utils</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libraries/utils.jar</systemPath>
         </dependency>
     </dependencies>
     <build>

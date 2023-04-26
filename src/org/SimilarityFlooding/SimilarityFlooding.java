@@ -2,18 +2,19 @@ package org.SimilarityFlooding;
 
 import org.SimilarityFlooding.DataTypes.*;
 import org.javatuples.Pair;
+import org.utils.Correspondence;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class SimilarityFlooding {
-    private final ArrayList<AbsoluteSimilarity> distances = new ArrayList<>();
+public class SimilarityFlooding<T> {
+    private final ArrayList<AbsoluteSimilarity<T>> distances = new ArrayList<>();
     private final ArrayList<PairwiseConnectivity> pcg;
-    private final Graph graph1;
-    private final Graph graph2;
+    private final Graph<T> graph1;
+    private final Graph<T> graph2;
     private final FixpointFormula fixpointFormula;
 
-    SimilarityFlooding(Graph g1, Graph g2, SFConfig config) {
+    public SimilarityFlooding(Graph<T> g1, Graph<T> g2, SFConfig config) {
         this.fixpointFormula = config.fixpointFormula();
 
         if (g1.edges().isEmpty() || g2.edges().isEmpty())
@@ -24,7 +25,7 @@ public class SimilarityFlooding {
         // read database and initialize pairwise distances
         g1.nodes().forEach(nodeA ->
                 g2.nodes().forEach(nodeB ->
-                        distances.add(new AbsoluteSimilarity(nodeA, nodeB, config.similarityAlgorithm()))));
+                        distances.add(new AbsoluteSimilarity<T>((T) nodeA, (T) nodeB, config.similarityAlgorithm()))));
 
         pcg = new ArrayList<>();
         // prep PCG
@@ -57,7 +58,7 @@ public class SimilarityFlooding {
 
     public void run(int maxRounds, float maxresidual) {
         float residual = 1.0f;
-        var prevValues = distances.stream().map(Similarity::similarity).toList();
+        var prevValues = distances.stream().map(Correspondence::similarity).toList();
         int iter = 0;
 
         // initialize values
@@ -71,12 +72,13 @@ public class SimilarityFlooding {
             java.util.List<Double> finalPrevValues = prevValues;
             residual = (float) IntStream.range(0, distances.size())
                     .mapToDouble(index -> distances.get(index).similarity() - finalPrevValues.get(index)).map(Math::abs).sum();
-            prevValues = distances.stream().map(Similarity::similarity).toList();
+            prevValues = distances.stream().map(Correspondence::similarity).toList();
         }
         iterate();
 
         System.out.printf("Done after %d iterations.\n", iter);
-        distances.sort(Comparator.comparingDouble(AbsoluteSimilarity::similarity).reversed());
+        distances.sort(Comparator.comparingDouble(Correspondence::similarity));
+        Collections.reverse(distances);
         System.out.print("\n");
         distances.forEach(dist -> System.out.printf(dist.toString() + "\n"));
     }
@@ -89,11 +91,15 @@ public class SimilarityFlooding {
         distances.forEach(dist -> dist.similarity /= normalizationFactor);
     }
 
-    public List<AbsoluteSimilarity> getDistances() {
-        return distances;
+    public List<Correspondence<T>> getCorrespondants() {
+        return distances.stream()
+                .map(dist -> new Correspondence<>(
+                        dist.nodeA(),
+                        dist.nodeB(),
+                        dist.similarity())).toList();
     }
 
-    public Pair<Graph, Graph> getGraphs() {
+    public Pair<Graph<T>, Graph<T>> getGraphs() {
         return new Pair<>(graph1, graph2);
     }
 
@@ -114,7 +120,7 @@ public class SimilarityFlooding {
                     distance.similarity += distance.initialSimilarity();
                     distance.similarityN1 += distance.initialSimilarity();
                     break;
-                case default:
+                default:
                     throw new IllegalArgumentException("FixpointFormula invalid");
             }
         });
@@ -124,5 +130,17 @@ public class SimilarityFlooding {
             pc.children().similarityN1 += pc.parents().similarity() * pc.coefficient;
             pc.parents().similarityN1 += pc.children().similarity() * pc.reversecoefficient;
         });
+        /*
+        distances.stream().map(dist -> new AbsoluteSimilarity<TreeNode>(
+                dist.nodeA(),
+                dist.nodeB(),
+                dist.similarityN1() +
+                        pcg.stream().filter(pc -> pc.parents().equals(dist))
+                                .mapToDouble(pc -> pc.parents().similarity() * pc.coefficient).sum() +
+                        pcg.stream().filter(pc -> pc.children().equals(dist))
+                                .mapToDouble(pc -> pc.children().similarity() * pc.reversecoefficient).sum(),
+                dist.initialSimilarity(),
+                dist.similarityN1()
+        ));*/
     }
 }

@@ -2,4 +2,4 @@ package org.SimilarityFlooding.DataTypes;
 
 import java.util.HashSet;
 
-public record Graph(HashSet<TreeNode> nodes, HashSet<Relation> edges) {}
+public record Graph<T>(HashSet<T> nodes, HashSet<Relation<T>> edges) {}
