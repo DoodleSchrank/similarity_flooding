@@ -16,8 +16,8 @@ public class Selector {
         return t -> seen.add(keyExtractor.apply(t));
     }
 
-    public static List<Correspondence<String>> selectThreshold(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances, float similarityThreshold) {
-        var relativeSimilarities = new ArrayList<RelativeSimilarity<String>>();
+    public static <T> List<Correspondence<T>> selectThreshold(Pair<Graph<String>, Graph<T>> graphs, List<Correspondence<T>> distances, float similarityThreshold) {
+        var relativeSimilarities = new ArrayList<RelativeSimilarity<T>>();
         distances.forEach(dist -> relativeSimilarities.add(new RelativeSimilarity<>(dist)));
 
         graphs.getValue0().nodes().forEach(node -> {
@@ -35,20 +35,20 @@ public class Selector {
                 .filter(rsim -> rsim.similarity() > similarityThreshold && rsim.reverseSimilarity() > similarityThreshold).toList()::contains).toList());
     }
 
-    public static List<Correspondence<String>> highestCumulativeSimilaritySelection(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances) {
-        var uniqueNodeA = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeA)).map(Correspondence::nodeA).map(Object::toString).toList());
-        var uniqueNodeB = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeB)).map(Correspondence::nodeB).map(Object::toString).toList());
+    public static <T> List<Correspondence<T>> highestCumulativeSimilaritySelection(Pair<Graph<T>, Graph<T>> graphs, List<Correspondence<T>> distances, T empty) {
+        var uniqueNodeA = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeA)).map(Correspondence::nodeA).toList());
+        var uniqueNodeB = new ArrayList<>(distances.stream().filter(distinctByKey(Correspondence::nodeB)).map(Correspondence::nodeB).toList());
 
         // ensure square matrix
         var nodeAmountDiff = uniqueNodeA.size() - uniqueNodeB.size();
         if (nodeAmountDiff > 0) {
             while (nodeAmountDiff > 0) {
-                uniqueNodeB.add("null");
+                uniqueNodeB.add(empty);
                 nodeAmountDiff--;
             }
         } else if (nodeAmountDiff < 0) {
             while (nodeAmountDiff < 0) {
-                uniqueNodeA.add("null");
+                uniqueNodeA.add(empty);
                 nodeAmountDiff++;
             }
         }
@@ -68,7 +68,7 @@ public class Selector {
 
         var ha = new HungarianAlgorithm(matrix);
         var assignments = ha.findOptimalAssignment();
-        var resultingAssignments = new ArrayList<Correspondence<String>>();
+        var resultingAssignments = new ArrayList<Correspondence<T>>();
 
         for (var ass : assignments) {
             resultingAssignments.add(distances.stream().filter(dist ->
@@ -88,10 +88,10 @@ public class Selector {
         return resultingAssignments;
     }
 
-    public static List<Correspondence<String>> stableMarriageSelection(List<Correspondence<String>> distances) {
+    public static <T> List<Correspondence<T>> stableMarriageSelection(List<Correspondence<T>> distances) {
         distances.sort(Comparator.comparingDouble(Correspondence::similarity));
         Collections.reverse(distances);
-        var resultDistances = new ArrayList<Correspondence<String>>();
+        var resultDistances = new ArrayList<Correspondence<T>>();
         for (var distance : distances) {
             if (resultDistances.stream().anyMatch(rd -> rd.nodeA().equals(distance.nodeA()) || rd.nodeB().equals(distance.nodeB())))
                 continue;

@@ -32,7 +32,7 @@ public class CSVParser {
             return Optional.empty();
         }
 
-        var edges = new HashSet<Relation<String>>();
+        var edges = new ArrayList<Relation<String>>();
 
         // static schema types
         List<String> schematypes = new ArrayList<>(
@@ -40,7 +40,7 @@ public class CSVParser {
                         "table",
                         "column",
                         "columntype"));
-        var nodes = new HashSet<>(schematypes);
+        var nodes = new ArrayList<>(schematypes);
         // generate datatypes based on unique values for type in the CSV
         List<String> datatypes = new ArrayList<>();
         types.stream().distinct().forEach(datatypes::add);

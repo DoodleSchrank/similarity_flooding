@@ -23,18 +23,18 @@ public final class Filter {
         return knowledgeFilter(correspondences, StaticMappings);
     }
 
-    public static List<Correspondence<String>> knowledgeFilter(List<Correspondence<String>> correspondences, Map<String, String> knowledge) {
-        var filteredDistances = new ArrayList<Correspondence<String>>();
+    public static <T> List<Correspondence<T>> knowledgeFilter(List<Correspondence<T>> correspondences, Map<String, String> knowledge) {
+        var filteredDistances = new ArrayList<Correspondence<T>>();
         for (var dist : correspondences) {
-            var nodeA = Objects.toString(knowledge.get(dist.nodeA()),
-                    knowledge.containsValue(dist.nodeA()) ? dist.nodeA() : null);
-            var nodeB = Objects.toString(knowledge.get(dist.nodeB()),
-                    knowledge.containsValue(dist.nodeB()) ? dist.nodeB() : null);
+            var nodeA = Objects.toString(knowledge.get(dist.nodeA().toString()),
+                    knowledge.containsValue(dist.nodeA().toString()) ? dist.nodeA().toString() : null);
+            var nodeB = Objects.toString(knowledge.get(dist.nodeB().toString()),
+                    knowledge.containsValue(dist.nodeB().toString()) ? dist.nodeB().toString() : null);
 
             if (nodeA == null && nodeB == null)
                 filteredDistances.add(dist);
             else if (nodeA != null && nodeA.equals(nodeB)) {
-                filteredDistances.add(new Correspondence<String>(dist, 1.0f));
+                filteredDistances.add(new Correspondence<>(dist, 1.0f));
             }
         }
 
@@ -43,7 +43,7 @@ public final class Filter {
         return filteredDistances;
     }
 
-    public static List<Correspondence<String>> typingConstraintFilter(Pair<Graph<String>, Graph<String>> graphs, List<Correspondence<String>> distances) {
+    public static <T> List<Correspondence<T>> typingConstraintFilter(Pair<Graph<T>, Graph<T>> graphs, List<Correspondence<T>> distances) {
         var filteredDistances = new ArrayList<>(distances);
 
         var typedNodes1 = graphs.getValue0().edges().stream().filter(edge -> edge.relation().equals("sqltype")).map(Relation::parent).toList();
@@ -57,13 +57,13 @@ public final class Filter {
         return filteredDistances;
     }
 
-    public static List<Correspondence<String>> cardinalityConstraintFilter(List<Correspondence<String>> distances) {
+    public static <T> List<Correspondence<T>> cardinalityConstraintFilter(List<Correspondence<T>> distances) {
         var filteredDistances = new ArrayList<>(distances);
         //TODO flip to add distances instead of removing them
         filteredDistances.removeIf(distance -> distances.stream()
                 .map(dist -> distances.stream()
                         .filter(d -> d.nodeB().equals(dist.nodeB()))
-                        .max(Comparator.comparingDouble(Correspondence::similarity)).get())
+                        .max(Comparator.comparingDouble(Correspondence::similarity)).orElse(null))
                 .noneMatch(distance::equals));
         return filteredDistances;
     }

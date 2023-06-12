@@ -5,30 +5,30 @@ import org.SimilarityFlooding.DataTypes.*;
 import org.SimilarityFlooding.Util.*;
 import org.javatuples.Pair;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 public class Main {
     private static Pair<Graph<String>, Graph<String>> SimpleExample() {
-        var nodes = new HashSet<String>();
+        var nodes = new ArrayList<String>();
         nodes.add("first");
         nodes.add("second");
         nodes.add("third");
         nodes.add("fourth");
-        var relations = new HashSet<Relation<String>>();
+        var relations = new ArrayList<Relation<String>>();
         var nodearr = nodes.toArray(new String[0]);
         relations.add(new Relation<>("testingRel", nodearr[0], nodearr[1]));
         relations.add(new Relation<>("otherRel", nodearr[1], nodearr[2]));
         relations.add(new Relation<>("otherRel", nodearr[1], nodearr[3]));
-        var g1 = new Graph<>(new HashSet<>(nodes), new HashSet<>(relations));
+        var g1 = new Graph<>(new ArrayList<>(nodes), new ArrayList<>(relations));
 
-        nodes = new HashSet<>();
+        nodes = new ArrayList<>();
         nodes.add("erster");
         nodes.add("zweiter");
         nodes.add("dritter");
         nodes.add("vierter");
-        relations = new HashSet<>();
+        relations = new ArrayList<>();
         nodearr = nodes.toArray(new String[0]);
         relations.add(new Relation<>("testingRel", nodearr[0], nodearr[1]));
         relations.add(new Relation<>("otherRel", nodearr[1], nodearr[2]));
@@ -38,24 +38,24 @@ public class Main {
     }
 
     private static Pair<Graph<String>, Graph<String>> ICDE02Example() {
-        var nodes = new HashSet<String>();
+        var nodes = new ArrayList<String>();
         nodes.add("a");
         nodes.add("a1");
         nodes.add("a2");
         var nodearr = nodes.toArray(new String[0]);
-        var relations = new HashSet<Relation<String>>();
+        var relations = new ArrayList<Relation<String>>();
         relations.add(new Relation<>("l1", nodearr[1], nodearr[0]));
         relations.add(new Relation<>("l1", nodearr[1], nodearr[2]));
         relations.add(new Relation<>("l2", nodearr[0], nodearr[2]));
         var g1 = new Graph<>(nodes, relations);
 
 
-        nodes = new HashSet<>();
+        nodes = new ArrayList<>();
         nodes.add("b");
         nodes.add("b1");
         nodes.add("b2");
         nodearr = nodes.toArray(new String[0]);
-        relations = new HashSet<>();
+        relations = new ArrayList<>();
         relations.add(new Relation<>("l1", nodearr[1], nodearr[2]));
         relations.add(new Relation<>("l2", nodearr[1], nodearr[0]));
         relations.add(new Relation<>("l2", nodearr[0], nodearr[2]));
@@ -83,10 +83,10 @@ public class Main {
                 g1 = graphs.getValue0();
                 g2 = graphs.getValue1();
             }
-            case 3 -> {
-                g1 = YAMLParser.Parse("src/test_data/schema.yaml").orElseThrow();
-                g2 = YAMLParser.Parse("src/test_data/schema.yaml").orElseThrow();
-            }
+            /*case 3 -> {
+                g1 = YAMLParser.ParseGraph("src/test_data/schema.yaml").orElseThrow();
+                g2 = YAMLParser.ParseGraph("src/test_data/schema.yaml").orElseThrow();
+            }*/
         }
 
         var sf = new SimilarityFlooding(g1, g2, new SFConfig(StringSimilarity::AllEqual, FixpointFormula.Basic));

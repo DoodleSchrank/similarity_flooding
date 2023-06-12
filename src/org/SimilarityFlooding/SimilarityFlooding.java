@@ -25,7 +25,7 @@ public class SimilarityFlooding<T> {
         // read database and initialize pairwise distances
         g1.nodes().forEach(nodeA ->
                 g2.nodes().forEach(nodeB ->
-                        distances.add(new AbsoluteSimilarity<T>((T) nodeA, (T) nodeB, config.similarityAlgorithm()))));
+                        distances.add(new AbsoluteSimilarity<>(nodeA, nodeB, config.similarityAlgorithm()))));
 
         pcg = new ArrayList<>();
         // prep PCG
